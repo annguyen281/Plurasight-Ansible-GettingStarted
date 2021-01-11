@@ -11,5 +11,13 @@
       image: python
       interactive: yes
       name: "{{ item }}"
-      state: present
+      state: started
     loop: "{{ query('inventory_hostnames', 'containers') }}"
+
+- name: Ensure git configured in containers
+  hosts: ang01_ubuntus
+  tasks:
+  - git_config: scope=global list_all=yes
+  - git_config: scope=global name=user.email value=annguyen281@gmail.com
+  - git_config: scope=global name=user.name value=Nguyen
+  - git_config: scope=global list_all=yes
