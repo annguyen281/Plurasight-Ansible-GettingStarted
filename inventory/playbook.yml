@@ -1,0 +1,32 @@
+---
+# ansible -m copy -a "src=..adhoc/master.gitconfig dest=~/.gitconfig" localhost
+
+- name: Ensure ~/.gitconfig copied from master.gitconfig
+  #gather_facts: false
+  hosts: ang01_ubuntus
+  tags: ['install-git']
+  tasks:
+  - package: name=git state=latest
+    become: yes
+
+- name: Ensure ~/.gitconfig copied from master.gitconfig
+  hosts: ang01_ubuntus
+  tasks:
+  
+  - name: first show no config in targets
+    command: git config --global --list
+    ignore_errors: yes
+    register: git_config_before
+  - name: show git config output always - verbosity 0 is default for debug module
+    debug: var=git_config_before
+
+  - name: tried and true copy module with master.gitconfig from previously in the course
+    copy: src=master.gitconfig dest=~/.gitconfig
+
+  - name: show newly added config
+    command: git config --global --list
+    ignore_errors: yes
+    register: git_config_after
+
+  - name: ensure to show git config after with debug - this time only show stdout_lines
+    debug: var=git_config_after.stdout_lines
