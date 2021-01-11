@@ -1,0 +1,15 @@
+- name: Ensure pre-reqs for docker_container module
+  hosts: ang01_ubuntus
+  tasks:
+  - pip: name=docker state=present
+
+- name: Ensure docker containers created
+  hosts: ang01_ubuntus
+  tasks:
+  - name: Ensure docker container started
+    docker_container:
+      image: python
+      interactive: yes
+      name: "{{ item }}"
+      state: present
+    loop: "{{ query('inventory_hostnames', 'containers') }}"
