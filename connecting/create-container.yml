@@ -1,10 +1,10 @@
 - name: Ensure pre-reqs for docker_container module
-  hosts: ang01_ubuntus
+  hosts: localhost
   tasks:
   - pip: name=docker state=present
 
 - name: Ensure docker containers created
-  hosts: ang01_ubuntus
+  hosts: localhost
   tasks:
   - name: Ensure docker container started
     docker_container:
@@ -15,7 +15,7 @@
     loop: "{{ query('inventory_hostnames', 'containers') }}"
 
 - name: Ensure git configured in containers
-  hosts: ang01_ubuntus
+  hosts: containers
   tasks:
   - git_config: scope=global list_all=yes
   - git_config: scope=global name=user.email value=annguyen281@gmail.com
